@@ -47,7 +47,7 @@ public class ForgotPasswordController {
     		service.updateResetPasswordToken(token, forgetPasswordRequest.getEmail());
     		//String url = request.getScheme() + "://" + request.getServerName();
     		//String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
-    		String staticUrl = "https://map-react-misha.herokuapp.com";
+    		String staticUrl = "https://reactmapmisha.shiftescape.com";
 
     		String resetPasswordLink = staticUrl +"/reset_password?token=" + token;
     		sendEmail(forgetPasswordRequest.getEmail(), resetPasswordLink);
@@ -100,6 +100,4 @@ public class ForgotPasswordController {
 	    		return new ResponseEntity<>(HttpStatus.OK);
 	    	}
 	    }
-	    
-	    
 }

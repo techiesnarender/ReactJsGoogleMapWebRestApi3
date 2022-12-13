@@ -114,7 +114,7 @@ public class UserController {
 	
 	//@PutMapping("/users/{id}")
 	@RequestMapping(value = "/users/edit/{id}", method = RequestMethod.POST)
-	public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
+	public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user){
 		try {
 			Optional<User> usersData = userService.getUser(id);
 			
@@ -204,7 +204,7 @@ public class UserController {
 		    return Sort.Direction.ASC;
 		  }
 	
-	@GetMapping("/users/paging")
+	  @GetMapping("/users/paging")
 	  public ResponseEntity<Map<String, Object>> getAllUserWithPaging(
 		  @RequestParam(required = false) String address,
 	      @RequestParam(defaultValue = "0") int page,
