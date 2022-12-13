@@ -254,6 +254,23 @@ public class UserController {
 	    }
 	  }
 
-
+		@GetMapping("/users/search/{company}")
+		public ResponseEntity<List<User>> searchByCompanyName(@PathVariable String company){
+				if(!company.isEmpty()) {				
+					try {
+						List<User> list = paginationRepository.findByCompanyContaining(company);
+						
+						if( list.isEmpty() || list.size() == 0 ) {
+							return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+						}		
+						return new ResponseEntity<>(list, HttpStatus.OK);			
+					}catch(Exception e) {
+						return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+					}			
+				}else {
+					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				}		
+		}
+	  
 }
 	
