@@ -27,5 +27,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	  	    public User findByEmailToken(String email); 
 	  	     
 	  	    public User findByResetPasswordToken(String token);
+	  	    
+	  	  @Query("SELECT c FROM User c WHERE c.address LIKE %:address%")
+	  	  List<User> findAllByAddress(String address);
 	  	   
 }

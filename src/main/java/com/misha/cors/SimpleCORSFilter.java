@@ -33,7 +33,7 @@ public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
     response.setHeader("Access-Control-Max-Age", "3600");
     response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
-    log.info("SimpleCORSFilter Working");
+    //log.info("SimpleCORSFilter Working");
     chain.doFilter(req, res);
 }
 

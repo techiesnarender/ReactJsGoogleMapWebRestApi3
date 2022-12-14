@@ -192,8 +192,7 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
+
 	 private Sort.Direction getSortDirection(String direction) {
 		    if (direction.equals("asc")) {
 		      return Sort.Direction.ASC;
@@ -254,23 +253,43 @@ public class UserController {
 	    }
 	  }
 
-		@GetMapping("/users/search/{company}")
-		public ResponseEntity<List<User>> searchByCompanyName(@PathVariable String company){
-				if(!company.isEmpty()) {				
-					try {
-						List<User> list = paginationRepository.findByCompanyContaining(company);
-						
-						if( list.isEmpty() || list.size() == 0 ) {
-							return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-						}		
-						return new ResponseEntity<>(list, HttpStatus.OK);			
-					}catch(Exception e) {
-						return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-					}			
-				}else {
-					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-				}		
-		}
+//		@GetMapping("/users/search/{company}")
+//		public ResponseEntity<List<User>> searchByCompanyName(@PathVariable String company){
+//				if(!company.isEmpty()) {
+//					try {
+//						List<User> list = paginationRepository.findByCompanyContaining(company);
+//						if( list.isEmpty() || list.size() == 0 ) {
+//							return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//						}
+//						return new ResponseEntity<>(list, HttpStatus.OK);			
+//					}catch(Exception e) {
+//						return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//					}			
+//				}else {
+//					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//				}		
+//		}
+	  
+	  @GetMapping("/users/page")
+	  public ResponseEntity<List<User>> getSearch(@RequestParam(required = false) String address) {
+
+	    try {
+	      List<User> users = new ArrayList<User>();
+    
+	      if (address == null)
+	    	  users = (List<User>) userRepository.findAll();
+	      else
+	    	  users = userRepository.findAllByAddress(address);
+	     
+	      if (users.isEmpty()) {
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	      }
+
+	      return new ResponseEntity<>(users, HttpStatus.OK);
+	    } catch (Exception e) {
+	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	  }
 	  
 }
 	

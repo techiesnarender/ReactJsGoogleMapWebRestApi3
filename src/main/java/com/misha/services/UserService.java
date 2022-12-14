@@ -29,6 +29,10 @@ public class UserService {
 			return  (List<User>) userRepository.findAll();
 		}
 		
+//		public List<User> getAllUsers() {
+//			return  (List<User>) userRepository.findAll();
+//		}
+//		
 		public User saveUser(User user) {
 			//user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 			return userRepository.save(user);
@@ -47,11 +51,6 @@ public class UserService {
 		public List<User> getNearsetLoactionOfSitter(String address, String latitude, String longitude){
 			return userRepository.getNearsetLoactionOfSitter(address, latitude, longitude);	
 		}
-		
-		/*
-		 * public List<User> findUserWithSorting(String field){ return
-		 * userRepository.findAll(Sort.by(Sort.Direction.ASC, field)); }
-		 */
 		
 		
 		public void updateResetPasswordToken(String token, String email) throws UserNotFoundException {
