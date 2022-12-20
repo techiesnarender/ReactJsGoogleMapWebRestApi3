@@ -271,7 +271,7 @@ public class UserController {
 //		}
 	  
 	  @GetMapping("/users/page")
-	  public ResponseEntity<List<User>> getSearch(@RequestParam(required = false) String address) {
+	  public ResponseEntity<List<User>> getSearch(@RequestParam(required = false) String address){
 
 	    try {
 	      List<User> users = new ArrayList<User>();

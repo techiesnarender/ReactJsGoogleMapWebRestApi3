@@ -3,7 +3,6 @@ package com.misha.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,6 +15,7 @@ import javax.persistence.Table;
 
 import lombok.ToString;
 import javax.persistence.*;
+
 @Entity
 @ToString
 @Table(name = "user",uniqueConstraints = { 
