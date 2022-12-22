@@ -4,7 +4,7 @@ public class FileStorageException extends RuntimeException {
     /**
 	 * Auther: Narender Singh
 	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	public FileStorageException(String message) {
         super(message);
