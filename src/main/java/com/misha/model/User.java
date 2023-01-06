@@ -28,12 +28,15 @@ public class User {
 	private Integer id;
 
 	private String contactname;
-
+	
+	@Column(unique=true)
 	private String email;
 
 	private String password;
 
 	private String company;
+	
+	private String location;
 
 	private String address;
 
@@ -62,7 +65,7 @@ public class User {
 		super();
 	}
 
-	public User(Integer id, String contactname, String email, String password, String company, String address,
+	public User(Integer id, String contactname, String email, String password, String company, String location, String address,
 			String latitude, String longitude, String open, String close, float chargesperhour, String logo,
 			boolean enabled, String resetPasswordToken) {
 		super();
@@ -71,6 +74,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.company = company;
+		this.location = location;
 		this.address = address;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -120,6 +124,15 @@ public class User {
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+	
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public String getAddress() {

@@ -89,7 +89,7 @@ public class UserController {
 	@GetMapping("/users/{id}")
 	public ResponseEntity<User> getUser(@PathVariable Integer id) {	
 		try {
-			Optional<User> user = userService.getUser(id);			
+			Optional<User> user = userService.getUser(id);		
 			if (user.isPresent()) {
 				return new ResponseEntity<User>(user.get(), HttpStatus.OK);
 			}else {
@@ -101,9 +101,14 @@ public class UserController {
 	}
 	
 	@PostMapping("/users")
-	public ResponseEntity<User> saveUser(@RequestBody User user){
-			
+	public ResponseEntity<?> saveUser(@RequestBody User user){
 		try {
+			Optional<User> userEmail=userService.findByEmail(user.getEmail());
+			if(userEmail.isPresent()){
+				return ResponseEntity
+						.badRequest()
+						.body(new MessageResponse("Email id already exist!"));	
+			}
 			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 			return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -122,6 +127,7 @@ public class UserController {
 				User users = usersData.get();
 				users.setContactname(user.getContactname());
 				users.setEmail(user.getEmail());
+				users.setLocation(user.getLocation());
 				users.setAddress(user.getAddress());
 				users.setChargesperhour(user.getChargesperhour());
 				users.setOpen(user.getOpen());
@@ -148,6 +154,21 @@ public class UserController {
 			}else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}		
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@RequestMapping(value = "/users/deleteall/{id}", method = RequestMethod.POST)
+	public ResponseEntity<HttpStatus> deleteListOfUser(@PathVariable List<Integer> id) {
+		try {		
+			List<User> results = userService.getUser(id);
+			if(results != null && !results.isEmpty()) {
+			    userService.deleteManyById(id);
+			    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -234,6 +255,64 @@ public class UserController {
 	      pageTuts = paginationRepository.findAll(pagingSort);
 	      else
 	          pageTuts = paginationRepository.findByAddressContaining(address, pagingSort);
+	      
+	      users = pageTuts.getContent();
+
+	      if (users.isEmpty()) {
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	      }
+
+	      Map<String, Object> response = new HashMap<>();
+	      response.put("user", users);
+	      response.put("currentPage", pageTuts.getNumber());
+	      response.put("totalItems", pageTuts.getTotalElements());
+	      response.put("totalPages", pageTuts.getTotalPages());
+
+	      return new ResponseEntity<>(response, HttpStatus.OK);
+	    } catch (Exception e) {
+	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	  }
+	  
+	  @GetMapping("/users/pagination")
+	  public ResponseEntity<Map<String, Object>> getAllUserWithPagination(
+		  @RequestParam(required = false) String address,
+		  @RequestParam(required = false) String company,
+	      @RequestParam(defaultValue = "0") int page,
+	      @RequestParam(defaultValue = "5") int size,
+	      @RequestParam(defaultValue = "id,desc") String[] sort) {
+
+	    try {
+	      List<Order> orders = new ArrayList<Order>();
+
+	      if (sort[0].contains(",")) {
+	          // will sort more than 2 fields
+	          // sortOrder="field, direction"
+	          for (String sortOrder : sort) {
+	            String[] _sort = sortOrder.split(",");
+	            orders.add(new Order(getSortDirection(_sort[1]),  _sort[0]));
+	          }
+	        } else {
+	          // sort=[field, direction]
+	          orders.add(new Order(getSortDirection(sort[1]), sort[0]));
+	        }
+
+	      List<User> users = new ArrayList<User>();
+	      Pageable pagingSort = PageRequest.of(page, size, Sort.by(orders));
+
+	      Page<User> pageTuts;
+	       
+	  
+	      if(address != null && company == null) {
+	    	  pageTuts = paginationRepository.findByAddressContaining(address, pagingSort); 
+	      }else if(address == null && company != null) {
+	    	  pageTuts = paginationRepository.findByCompanyContaining(company, pagingSort); 
+	      }
+	      else if(address != null && company != null){
+	    	  pageTuts = paginationRepository.findByAddressContainingAndCompanyContaining(address, company, pagingSort);
+	      }else {
+	    	  pageTuts = paginationRepository.findAll(pagingSort);
+	      }
 	      
 	      users = pageTuts.getContent();
 

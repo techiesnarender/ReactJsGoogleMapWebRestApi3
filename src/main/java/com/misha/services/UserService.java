@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.misha.model.User;
 import com.misha.repository.UserRepository;
 
-
 @Service
 @Transactional
 public class UserService {
@@ -29,12 +28,15 @@ public class UserService {
 			return  (List<User>) userRepository.findAll();
 		}
 		
+		public Optional<User> findByEmail(String email){
+		       return userRepository.findByEmail(email);
+		    }
+		
 //		public List<User> getAllUsers() {
 //			return  (List<User>) userRepository.findAll();
 //		}
 //		
 		public User saveUser(User user) {
-			//user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 			return userRepository.save(user);
 		}
 		
@@ -46,6 +48,10 @@ public class UserService {
 			if (getUser(id).isPresent()) {
 				userRepository.delete(getUser(id).get());
 			}
+		}
+		
+		public void deleteManyById(List<Integer> id) {
+		    userRepository.deleteByIdIn(id);
 		}
 		
 		public List<User> getNearsetLoactionOfSitter(String address, String latitude, String longitude){
@@ -74,6 +80,10 @@ public class UserService {
 			
 			user.setResetPasswordToken(null);
 			userRepository.save(user);
+		}
+
+		public List<User> getUser(List<Integer> id) {
+			 return (List<User>) userRepository.findAllById(id);
 		}
 	
 }

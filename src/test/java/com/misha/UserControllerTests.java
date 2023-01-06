@@ -61,7 +61,7 @@ public class UserControllerTests {
 	@Test
 	  void shouldCreateUser() throws Exception {
 		String password= "1234";
-	    User user = new User(1, "Xyz", "xyz@gmail.com",password , "Xyz Company", "Laxmi Nagar",
+	    User user = new User(1, "Xyz", "xyz@gmail.com",password , "Xyz Company","House no 120", "Laxmi Nagar",
 				"28.74", "72.64", "10:30", "06:30", 150, "null",
 				true , "null");
 	    	
