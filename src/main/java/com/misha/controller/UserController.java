@@ -27,10 +27,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.misha.model.User;
+import com.misha.model.UserDistance;
 import com.misha.payload.request.ChangePasswordRequest;
 import com.misha.payload.response.MessageResponse;
 import com.misha.repository.UserPaginationRepository;
 import com.misha.repository.UserRepository;
+import com.misha.services.UserDistanceService;
 import com.misha.services.UserService;
 
 @CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
@@ -40,6 +42,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserDistanceService distanceService;
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -102,14 +107,25 @@ public class UserController {
 	
 	@PostMapping("/users")
 	public ResponseEntity<?> saveUser(@RequestBody User user){
+		
 		try {
 			Optional<User> userEmail=userService.findByEmail(user.getEmail());
+			
 			if(userEmail.isPresent()){
 				return ResponseEntity
 						.badRequest()
 						.body(new MessageResponse("Email id already exist!"));	
 			}
+			if(user.getId() != null) {
+				Optional<User> userId=userRepository.findById(user.getId());
+				if(userId.isPresent()){
+					return ResponseEntity
+							.badRequest()
+							.body(new MessageResponse("Id already exist!"));	
+				}
+			}
 			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+			
 			return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
 		} catch (Exception e) {
 			
@@ -175,10 +191,11 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/search")
-	public ResponseEntity<List<User>> searchNearestLocation(@RequestParam String address, @RequestParam String latitude, @RequestParam String longitude){
+	public ResponseEntity<List<UserDistance>> searchNearestLocation(@RequestParam String address, @RequestParam String latitude, @RequestParam String longitude){
 			if(!address.isEmpty() && !latitude.isEmpty() && !longitude.isEmpty()) {				
 				try {
-					List<User> list = userService.getNearsetLoactionOfSitter(address, latitude, longitude);
+					List<UserDistance> list = distanceService.getNearsetLoactionOfSitters(address, latitude, longitude);
+					
 					
 					if( list.isEmpty() || list.size() == 0 ) {
 						return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -191,7 +208,7 @@ public class UserController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}		
 	}
-	
+		
 	@PostMapping("/users/changepassword")
 	public ResponseEntity<?> changeUserPassword(@RequestBody ChangePasswordRequest changePasswordRequest){
 		try {

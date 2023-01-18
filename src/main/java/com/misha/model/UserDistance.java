@@ -21,7 +21,7 @@ import javax.persistence.*;
 @Table(name = "user",uniqueConstraints = { 
 		@UniqueConstraint(columnNames = "email") 
 	})
-public class User {
+public class UserDistance {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,9 +54,7 @@ public class User {
 
 	private boolean enabled;
 	
-	
-  
-	//private  String DISTANCE;
+	private  String distance;
 	
 	@Column(name = "reset_password_token")
     private String resetPasswordToken;
@@ -65,13 +63,14 @@ public class User {
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
-	public User() {
+	public UserDistance() {
 		super();
 	}
 
-	public User(Integer id, String contactname, String email, String password, String company, String location, String address,
-			String latitude, String longitude, String open, String close, float chargesperhour, String logo,
-			boolean enabled, String resetPasswordToken) {
+	
+	public UserDistance(Integer id, String contactname, String email, String password, String company, String location,
+			String address, String latitude, String longitude, String open, String close, float chargesperhour,
+			String logo, boolean enabled, String distance, String resetPasswordToken, Set<Role> roles) {
 		super();
 		this.id = id;
 		this.contactname = contactname;
@@ -87,8 +86,11 @@ public class User {
 		this.chargesperhour = chargesperhour;
 		this.logo = logo;
 		this.enabled = enabled;
+		this.distance = distance;
 		this.resetPasswordToken = resetPasswordToken;
+		this.roles = roles;
 	}
+
 
 	public Integer getId() {
 		return id;
@@ -219,6 +221,13 @@ public class User {
 		this.roles = roles;
 	}
 
-	
+
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
 	
 }

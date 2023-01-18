@@ -1,6 +1,7 @@
 package com.misha.services;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.misha.model.User;
+import com.misha.model.UserDistance;
+import com.misha.repository.UserDistanceRepo;
 import com.misha.repository.UserRepository;
 
 @Service
@@ -18,12 +21,12 @@ public class UserService {
 
 		@Autowired
 		private final UserRepository userRepository;
-
+//		
 		public UserService(UserRepository userRepository) {
 			super();
 			this.userRepository = userRepository;
 		}
-		
+
 		public List<User> getAllUser() {
 			return  (List<User>) userRepository.findAll();
 		}
@@ -37,6 +40,7 @@ public class UserService {
 //		}
 //		
 		public User saveUser(User user) {
+			
 			return userRepository.save(user);
 		}
 		
@@ -53,11 +57,6 @@ public class UserService {
 		public void deleteManyById(List<Integer> id) {
 		    userRepository.deleteByIdIn(id);
 		}
-		
-		public List<User> getNearsetLoactionOfSitter(String address, String latitude, String longitude){
-			return userRepository.getNearsetLoactionOfSitter(address, latitude, longitude);	
-		}
-		
 		
 		public void updateResetPasswordToken(String token, String email) throws UserNotFoundException {
 			User user = userRepository.findByEmailToken(email);
@@ -85,7 +84,6 @@ public class UserService {
 		public List<User> getUser(List<Integer> id) {
 			 return (List<User>) userRepository.findAllById(id);
 		}
-	
 }
 		
 		
