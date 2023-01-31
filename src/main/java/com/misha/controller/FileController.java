@@ -67,9 +67,7 @@ public class FileController {
 		        return new UploadFileResponse(fileName, fileDownloadUri);
 	    	}else {
 	    		throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Email Address Not Found!");
-	    	}
-	    	
-		 
+	    	}	
 	    }
 	 
 		
