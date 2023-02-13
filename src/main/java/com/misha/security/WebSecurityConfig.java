@@ -67,7 +67,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("**/ReactJsGoogleMapWeb/imgs/**").permitAll()
 			.antMatchers("/images/**").permitAll()
 			.antMatchers("/v2/api-docs","/swagger-resources/**","/swagger-ui.html","/webjars/**" ,"/swagger.json").permitAll()
-			.anyRequest().authenticated();
+			.anyRequest().authenticated()
+			.and()
+			.logout()
+				.permitAll()
+				.logoutUrl("/signout")
+				.and()
+				.exceptionHandling().accessDeniedPage("/403");
+			
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 	
