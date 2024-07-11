@@ -26,7 +26,7 @@ import com.misha.repository.RoleRepository;
 import com.misha.repository.UserRepository;
 import com.misha.services.UserDetailsImpl;
 
-@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
+@CrossOrigin(origins= {"*"}, maxAge = 4800000, allowCredentials = "false" )
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

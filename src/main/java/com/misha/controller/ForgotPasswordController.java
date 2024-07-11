@@ -28,7 +28,7 @@ import com.misha.services.UserService;
 
 import net.bytebuddy.utility.RandomString;
 
-@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
+@CrossOrigin(origins= {"*"}, maxAge = 4800000, allowCredentials = "false" )
 @RestController
 @RequestMapping("/api")
 public class ForgotPasswordController {
@@ -47,7 +47,8 @@ public class ForgotPasswordController {
     		service.updateResetPasswordToken(token, forgetPasswordRequest.getEmail());
     		//String url = request.getScheme() + "://" + request.getServerName();
     		//String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
-    		String staticUrl = "https://reactmapmisha.shiftescape.com";
+//    		String staticUrl = "https://reactmapmisha.shiftescape.com";
+			String staticUrl = "http://localhost:3000";
 
     		String resetPasswordLink = staticUrl +"/reset_password?token=" + token;
     		sendEmail(forgetPasswordRequest.getEmail(), resetPasswordLink);

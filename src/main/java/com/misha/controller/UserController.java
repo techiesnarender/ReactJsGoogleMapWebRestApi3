@@ -35,7 +35,7 @@ import com.misha.repository.UserRepository;
 import com.misha.services.UserDistanceService;
 import com.misha.services.UserService;
 
-@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
+@CrossOrigin(origins= {"*"}, maxAge = 4800000, allowCredentials = "false" )
 @RestController
 @RequestMapping("/api")
 public class UserController {
